@@ -57,4 +57,4 @@ const verifySignUp = {
     checkRolesExisted
 }
 
-module.exports = verifySignUp;
+module.exports = verifySignUp

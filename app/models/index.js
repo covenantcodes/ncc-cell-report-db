@@ -9,4 +9,3 @@ db.role = require("./role.model");
 db.ROLES = ["user", "admin", "moderator"];
 
 module.exports = db;
-

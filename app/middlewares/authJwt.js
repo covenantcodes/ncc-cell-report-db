@@ -5,16 +5,16 @@ const User = db.user;
 const Role = db.role;
 
 verifyToken = (req, res, next) => {
-  let token = req.session.tokem;
+  let token = req.session.token;
 
   if (!token) {
     return res.status(403).send({ message: "No token provided!" });
   }
 
-  jwt.verify(tokem, config.secret, (err, decoded) => {
+  jwt.verify(token, config.secret, (err, decoded) => {
     if (err) {
       return res.status(401).send({
-        message: "Unauthorised!",
+        message: "Unauthorized!",
       });
     }
     req.userId = decoded.id;
@@ -38,6 +38,7 @@ isAdmin = (req, res, next) => {
           res.status(500).send({ message: err });
           return;
         }
+
         for (let i = 0; i < roles.length; i++) {
           if (roles[i].name === "admin") {
             next();
@@ -45,7 +46,7 @@ isAdmin = (req, res, next) => {
           }
         }
 
-        res.status(403).send({ message: "Requires Admin Role!" });
+        res.status(403).send({ message: "Require Admin Role!" });
         return;
       }
     );
@@ -63,31 +64,29 @@ isModerator = (req, res, next) => {
       {
         _id: { $in: user.roles },
       },
-
       (err, roles) => {
         if (err) {
-        res.status(500).send({ message: err });
-        return;
-      }
+          res.status(500).send({ message: err });
+          return;
+        }
 
-      for(let i = 0; i < roles.length; i++) {
-        if (roles[i].name === "moderator"){
+        for (let i = 0; i < roles.length; i++) {
+          if (roles[i].name === "moderator") {
             next();
             return;
+          }
         }
+
+        res.status(403).send({ message: "Require Moderator Role!" });
+        return;
       }
-      res.status(403).send({message: "Require Moderator Role!"});
-      return;
-    }
     );
   });
 };
 
-
 const authJwt = {
-    verifyToken,
-    isAdmin,
-    isModerator
+  verifyToken,
+  isAdmin,
+  isModerator,
 };
-
 module.exports = authJwt;

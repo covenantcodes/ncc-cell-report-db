@@ -1,6 +1,8 @@
-module.exports = {
-    HOST: "0.0.0.0",
-    PORT: 27017,
-    DB: "ncc_db"
-};
+const mongoose = require("mongoose");
 
+module.exports = {
+  HOST: "admin:passcode@ncc-cluster.vsywqpn.mongodb.net/?retryWrites=true&w=majority",
+  PORT: "",
+  DB: "ncc_db",
+  mongoose: mongoose,
+};
