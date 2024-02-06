@@ -8,7 +8,9 @@ var bcrypt = require("bcrypt");
 
 exports.signup = (req, res) => {
   if (!req.body.username || !req.body.email || !req.body.password) {
-    return res.status(400).send({ message: "Username, email, and password are required fields." });
+    return res
+      .status(400)
+      .send({ message: "Username, email, and password are required fields." });
   }
 
   bcrypt.hash(req.body.password, 8, (err, hash) => {
@@ -96,9 +98,10 @@ exports.signin = (req, res) => {
       }
 
       const token = jwt.sign({ id: user.id }, config.secret, {
-        algorithm: "HS256",
-        expiresIn: 86400, // 24 hours
+        expiresIn: config.jwtExpiration,
       });
+
+      
 
       var authorities = [];
 
