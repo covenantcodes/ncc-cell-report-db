@@ -9,7 +9,7 @@ const app = express();
 
 // Enable CORS with specific origin
 const corsOptions = {
-  origin: "http://localhost:8081",
+  origin: "http://localhost:5173",
 };
 app.use(cors(corsOptions));
 
@@ -80,6 +80,8 @@ app.get("/", (req, res) => {
 // Routes
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
+require("./app/routes/cell.routes")(app);
+
 
 // Set port and start listening for requests
 const PORT = process.env.PORT || 8080;
