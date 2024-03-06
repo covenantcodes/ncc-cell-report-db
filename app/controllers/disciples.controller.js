@@ -51,3 +51,13 @@ exports.findByOwnerCell = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+//Find a single Disciple with an id
+exports.findOne = async (req, res) => {
+  try {
+    const disciple = await DisciplesModel.findById(req.params.id);
+    res.status(200).json(disciple);
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
+  }
+};
