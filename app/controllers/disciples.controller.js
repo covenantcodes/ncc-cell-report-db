@@ -1,35 +1,36 @@
 const DisciplesModel = require("../models/disciples.model");
 
-// Create and Save new Disciples
+// Create and Save a new Disciple
 exports.create = async (req, res) => {
-  //Validate request
+  // Validate request
   if (!req.body.name || !req.body.level || !req.body.ownerCell) {
-    res.status(400).send({ message: "Missing required fields" });
+    res.status(400).send({ message: "Missing required fields!" });
     return;
   }
 
-  //Create a Disciple
+  // Create a Disciple
   const disciple = new DisciplesModel({
     name: req.body.name,
     level: req.body.level,
     ownerCell: req.body.ownerCell,
   });
 
-  //Save Disciple in the database
+  // Save Disciple in the database
   try {
     const savedDisciple = await disciple.save();
     res.status(201).json({
       message: "Disciple created successfully",
-      data: savedDisciple,
+      disciple: savedDisciple,
     });
   } catch (err) {
     res.status(500).json({
-      message: err.message || "Some error occurred while creating the Disciple",
+      message:
+        err.message || "Some error occurred while creating the Disciple.",
     });
   }
 };
 
-// Retrieve and return all Disciples from the database
+// Retrieve all disciples from the database
 exports.findAll = async (req, res) => {
   try {
     const disciples = await DisciplesModel.find();
@@ -43,7 +44,7 @@ exports.findAll = async (req, res) => {
 exports.findByOwnerCell = async (req, res) => {
   const { ownerCellId } = req.params;
 
-  //Find disciples by ownerCell ID
+  // Find disciples by ownerCell ID
   try {
     const disciples = await DisciplesModel.find({ ownerCell: ownerCellId });
     res.status(200).json(disciples);
@@ -58,15 +59,15 @@ exports.findOne = async (req, res) => {
     const disciple = await DisciplesModel.findById(req.params.id);
     res.status(200).json(disciple);
   } catch (error) {
-    return res.status(404).json({ message: error.message });
+    res.status(404).json({ message: error.message });
   }
 };
 
-// Update a Disciple identified by the id in the request
+//Update a disciple by id in the request
 exports.update = async (req, res) => {
   if (!req.body) {
     res.status(400).send({
-      message: "Data to be can not be empty",
+      message: "Data to be updated can not be empty",
     });
   }
 
@@ -78,12 +79,10 @@ exports.update = async (req, res) => {
     .then((data) => {
       if (!data) {
         res.status(404).send({
-          message: "Cannot find disciple!",
+          message: `Disciple not found.`,
         });
       } else {
-        res.send({
-          message: "Disciple updated successfully",
-        });
+        res.send({ message: "Disciple updated successfully" });
       }
     })
     .catch((err) => {
@@ -93,23 +92,23 @@ exports.update = async (req, res) => {
     });
 };
 
-// Delete a Disciple with the specified id in the request
+//Delete a disciple with the specified id in the request
 exports.destroy = async (req, res) => {
-    await DisciplesModel.findOneAndRemove(req.params.id)
-      .then((data) => {
-        if (!data) {
-          res.status(404).send({
-            message: `Disciple not found.`,
-          });
-        } else {
-          res.send({
-            message: "Disciple deleted successfully!",
-          });
-        }
-      })
-      .catch((err) => {
-        res.status(500).send({
-          message: err.message,
+  await DisciplesModel.findOneAndRemove(req.params.id)
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({
+          message: `Disciple not found.`,
         });
+      } else {
+        res.send({
+          message: "Disciple deleted successfully!",
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message,
       });
-  };
+    });
+};
