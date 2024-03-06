@@ -61,3 +61,34 @@ exports.findOne = async (req, res) => {
     return res.status(404).json({ message: error.message });
   }
 };
+
+// Update a Disciple identified by the id in the request
+exports.update = async (req, res) => {
+  if (!req.body) {
+    res.status(400).send({
+      message: "Data to be can not be empty",
+    });
+  }
+
+  const id = req.params.id;
+
+  await DisciplesModel.findByIdAndUpdate(id, req.body, {
+    useFindAndModify: false,
+  })
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({
+          message: "Cannot find disciple!",
+        });
+      } else {
+        res.send({
+          message: "Disciple updated successfully",
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message,
+      });
+    });
+};
