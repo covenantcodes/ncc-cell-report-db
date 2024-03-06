@@ -92,3 +92,24 @@ exports.update = async (req, res) => {
       });
     });
 };
+
+// Delete a Disciple with the specified id in the request
+exports.destroy = async (req, res) => {
+    await DisciplesModel.findOneAndRemove(req.params.id)
+      .then((data) => {
+        if (!data) {
+          res.status(404).send({
+            message: `Disciple not found.`,
+          });
+        } else {
+          res.send({
+            message: "Disciple deleted successfully!",
+          });
+        }
+      })
+      .catch((err) => {
+        res.status(500).send({
+          message: err.message,
+        });
+      });
+  };
